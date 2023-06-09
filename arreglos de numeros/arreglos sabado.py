@@ -4,7 +4,7 @@ import random
 arregloA = np.random.randint(500, size=(100))
 lista = []
 
-print("Los números aleatorios son: ", arregloA)
+print("Los números aleatorios son: ",arregloA)
 
 for x in range(len(arregloA)):
     if x % 2 == 0:
@@ -26,4 +26,4 @@ indice = np.where(arregloA == numero)[0][0]
 print("El índice del número máximo en arreglo1 es:", indice)
 arreglo_cop1=arreglo_cop1*3
 print("hola",arreglo_cop1)
-np.sum(arreglo_cop1)
+print(np.sum(arreglo_cop1))
