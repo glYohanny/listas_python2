@@ -1,6 +1,4 @@
-import numpy as np
-
-vehiculos = np.empty((0, 7), dtype=object)  # Arreglo NumPy para almacenar los datos de los vehículos
+vehiculos = []
 
 def grabar_vehiculo():
     print("== Ingresar datos del vehículo ==")
@@ -8,6 +6,7 @@ def grabar_vehiculo():
     patente = input("Patente: ")
     marca = input("Marca: ")
     precio = float(input("Precio: "))
+
     multas = []
     while True:
         opcion = input("¿Agregar multa? (S/N): ")
@@ -17,10 +16,10 @@ def grabar_vehiculo():
             multas.append({"monto": monto, "fecha": fecha})
         else:
             break
+
     fecha_registro = input("Fecha de registro del vehículo (YYYY-MM-DD): ")
     nombre_dueno = input("Nombre del dueño: ")
 
-    vehiculo = np.array([[tipo, patente, marca, precio, multas, fecha_registro, nombre_dueno]], dtype=object)
     if not validar_patente(patente):
         print("La patente ingresada no es válida.")
         return
@@ -31,22 +30,32 @@ def grabar_vehiculo():
         print("El precio debe ser mayor a $5,000,000.")
         return
 
-    vehiculos = np.concatenate((vehiculos, vehiculo), axis=0)
+    vehiculo = {
+        "tipo": tipo,
+        "patente": patente,
+        "marca": marca,
+        "precio": precio,
+        "multas": multas,
+        "fecha_registro": fecha_registro,
+        "nombre_dueno": nombre_dueno
+    }
+
+    vehiculos.append(vehiculo)
     print("Vehículo registrado exitosamente.")
 
 def buscar_vehiculo():
     patente = input("Ingrese la patente del vehículo a buscar: ")
     encontrado = False
     for vehiculo in vehiculos:
-        if vehiculo[1] == patente:
+        if vehiculo["patente"] == patente:
             print("== Información del vehículo encontrado ==")
-            print("Tipo:", vehiculo[0])
-            print("Patente:", vehiculo[1])
-            print("Marca:", vehiculo[2])
-            print("Precio:", vehiculo[3])
-            print("Multas:", vehiculo[4])
-            print("Fecha de Registro:", vehiculo[5])
-            print("Nombre del Dueño:", vehiculo[6])
+            print("Tipo:", vehiculo["tipo"])
+            print("Patente:", vehiculo["patente"])
+            print("Marca:", vehiculo["marca"])
+            print("Precio:", vehiculo["precio"])
+            print("Multas:", vehiculo["multas"])
+            print("Fecha de Registro:", vehiculo["fecha_registro"])
+            print("Nombre del Dueño:", vehiculo["nombre_dueno"])
             encontrado = True
             break
     if not encontrado:
@@ -56,23 +65,45 @@ def imprimir_certificados():
     print("== Certificados de Emisión de Contaminantes, Anotaciones Vigentes y Multas ==")
     for vehiculo in vehiculos:
         print("Certificado de Emisión de Contaminantes")
-        print("Patente:", vehiculo[1])
-        print("Dueño:", vehiculo[6])
+        print("Patente:", vehiculo["patente"])
+        print("Dueño:", vehiculo["nombre_dueno"])
         print("---")
         print("Certificado de Anotaciones Vigentes")
-        print("Patente:", vehiculo[1])
-        print("Dueño:", vehiculo[6])
+        print("Patente:", vehiculo["patente"])
+        print("Dueño:", vehiculo["nombre_dueno"])
         print("---")
         print("Certificado de Multas")
-        print("Patente:", vehiculo[1])
-        print("Dueño:", vehiculo[6])
+        print("Patente:", vehiculo["patente"])
+        print("Dueño:", vehiculo["nombre_dueno"])
         print("===")
 
 def validar_patente(patente):
     # Verificar que la patente tenga un formato válido
-    # Ejemplo: AA123BB
-    if len(patente) != 7:
-        return False
-    if not patente[:2].isalpha() or not patente[2:5].isdigit() or not patente[5:].isalpha():
-        return False
-    return True
+    return True  # Implementar validación según el formato deseado
+
+def validar_marca(marca):
+    return 2 <= len(marca) <= 15
+
+def validar_precio(precio):
+    return precio > 5000000
+
+while True:
+    print("== Menú de Opciones ==")
+    print("1. Grabar vehículo")
+    print("2. Buscar vehículo")
+    print("3. Imprimir certificados")
+    print("4. Salir")
+
+    opcion = input("Seleccione una opción (1-4): ")
+
+    if opcion == '1':
+        grabar_vehiculo()
+    elif opcion == '2':
+        buscar_vehiculo()
+    elif opcion == '3':
+        imprimir_certificados()
+    elif opcion == '4':
+        print("¡Hasta luego!")
+        break
+    else:
+        print("Opción inválida. Intente nuevamente.")
